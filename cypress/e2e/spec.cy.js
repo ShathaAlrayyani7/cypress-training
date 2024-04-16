@@ -1,4 +1,5 @@
 import cryptocurrencyPage from "../pages/cryptocurrencyPage";
+import mockData from "../fixtures/mockData.json";
 
 const params = {
   limit: "100",
@@ -11,8 +12,13 @@ const params = {
 
 describe("template spec", () => {
   beforeEach(() => {
+    const url = `https://fda.forbes.com/v2/tradedAssets?*`;
+    cy.fixture("mockData").then((json) => {
+      cy.intercept("GET", url, json).as("getAllData");
+    });
     cy.visit(
-      "https://www.forbes.com/digital-assets/crypto-prices/?sh=6ed409832478"
+      "https://www.forbes.com/digital-assets/crypto-prices/?sh=6ed409832478",
+      { timeout: 300_000 }
     );
   });
 
@@ -23,27 +29,28 @@ describe("template spec", () => {
     cryptocurrencyPage.elements.weekHeader().should("have.text", "7D");
   });
 
-  // {
-  //   url:       "https://fda.forbes.com/v2/tradedAssets?limit=100&pageNum=1&sortBy=marketCap&direction=desc&query=&category=ft*",
-  //   query: { q: 'expected terms' },
-  it("should sort the prices dec", () => {
-    const queryString = cryptocurrencyPage.getQueryString(params);
+  it("should change color based on value", () => {
+    cy.wait("@getAllData", { timeout: 300_000 }).then((res) => {
+      cy.log("🚀 ~ .then ~ res:", res);
 
-    const url = `https://fda.forbes.com/v2/tradedAssets?*`;
-    cy.intercept(url, cryptocurrencyPage.mockData).as("getAllData");
-    // cy.wait("@getAllData", { timeout: 20000 })
-    //   .its("response.statusCode")
-    //   .should("eq", 200);
-    cryptocurrencyPage.clickOnPrice();
+      const rowCell1H = cryptocurrencyPage.elements.rowCell1H();
+      const rowCell1D = cryptocurrencyPage.elements.rowCell1D();
+      const rowCell7D = cryptocurrencyPage.elements.rowCell7D();
 
-    cy.wait("@getAllData", { timeout: 20000 })
-    // cryptocurrencyPage.elements
-    //   .priceHeader()
-    //   .children()
-    //   .last()
-    //   .then((lastChild) => {
-    //     lastChild.children().should();
-    //   });
+      rowCell1H
+        .eq(0)
+        .should("have.css", "color", "rgb(0, 153, 51)")
+        .should("have.text", "+0.86%");
 
+      rowCell1D
+        .eq(1)
+        .should("have.css", "color", "rgb(220, 0, 0)")
+        .should("have.text", "-7.10%");
+
+      rowCell7D
+        .eq(2)
+        .should("have.css", "color", "rgb(220, 0, 0)")
+        .should("have.text", "0.00%");
+    });
   });
 });
