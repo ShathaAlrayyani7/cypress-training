@@ -1,6 +1,6 @@
 class cryptocurrencyPage {
   elements = {
-    priceHeader: () => cy.get('[data-test="Price"]'),
+    priceHeader: () => cy.get('[data-test=Price]'),
     hourHeader: () => cy.get("[data-test=1H]"),
     dayHeader: () => cy.get("[data-test=24H]"),
     weekHeader: () => cy.get("[data-test=7D]"),
@@ -20,17 +20,6 @@ class cryptocurrencyPage {
     return query;
   }
 
-  filterData(criteria, order) {
-    let filteredData;
-    filteredData = this.mockData.assets.sort((a, b) => {
-      if (order == "desc") {
-        return b[criteria] - a[criteria];
-      } else {
-        return a[criteria] - b[criteria];
-      }
-    });
-    return filteredData;
-  }
 }
 
 module.exports = new cryptocurrencyPage();
