@@ -11,6 +11,12 @@
 //
 // -- This is a parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
+Cypress.Commands.overwrite("visit", (originalFn, url, options) => {
+  options = { ...options, timeout: 300_000 };
+
+  return originalFn(url, options);
+});
+
 //
 //
 // -- This is a child command --

@@ -18,8 +18,7 @@ describe("template spec", () => {
         cy.intercept("GET", url, json).as("getAllData");
       });
       cy.visit(
-        "https://www.forbes.com/digital-assets/crypto-prices/?sh=6ed409832478",
-        { timeout: 300_000 }
+        "https://www.forbes.com/digital-assets/crypto-prices/?sh=6ed409832478"
       );
     });
 
@@ -59,8 +58,7 @@ describe("template spec", () => {
   context("without mock data", () => {
     beforeEach(() => {
       cy.visit(
-        "https://www.forbes.com/digital-assets/crypto-prices/?sh=6ed409832478",
-        { timeout: 300_000 }
+        "https://www.forbes.com/digital-assets/crypto-prices/?sh=6ed409832478"
       );
     });
 
