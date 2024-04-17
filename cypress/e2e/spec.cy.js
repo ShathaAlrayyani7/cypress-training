@@ -30,17 +30,17 @@ describe("Testing Forbes's Cryptocurrency Prices Today table", () => {
         cy.get("@rowCell1H")
           .eq(0)
           .should("have.text", "+0.86%")
-          .should("have.css", "color", "rgb(0, 153, 51)");
+          .and("have.css", "color", "rgb(0, 153, 51)");
 
         cy.get("rowCell1D")
           .eq(1)
           .should("have.text", "-7.10%")
-          .should("have.css", "color", "rgb(220, 0, 0)");
+          .and("have.css", "color", "rgb(220, 0, 0)");
 
         cy.get("rowCell7D")
           .eq(2)
           .should("have.text", "0.00%")
-          .should("have.css", "color", "rgb(51, 51, 51)");
+          .and("have.css", "color", "rgb(51, 51, 51)");
       });
     });
   });
