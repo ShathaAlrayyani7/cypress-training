@@ -1,4 +1,4 @@
-class cryptocurrencyPage {
+class CryptocurrencyPage {
   elements = {
     priceHeader: () => cy.get("[data-test=Price]"),
     priceArrow: () => cy.get("[data-test=Price] span:nth-child(2)"),
@@ -10,6 +10,32 @@ class cryptocurrencyPage {
     rowCell7D: () => cy.get("[data-test=row-cell-7D] span"),
     rowCellPrice: () => cy.get("[data-test=row-cell-Price] span"),
   };
+
+  tableDataUrl = "https://fda.forbes.com/v2/tradedAssets?*";
+
+  colors = {
+    red: "rgb(220, 0, 0)",
+    green: "rgb(0, 153, 51)",
+    black: "rgb(51, 51, 51)",
+  };
+
+  dataForColorAssertions = [
+    {
+      element: '@rowCell1H',
+      text: "+0.86%",
+      color: this.colors.green,
+    },
+    {
+      element: '@rowCell1D',
+      text: "-7.10%",
+      color: this.colors.red,
+    },
+    {
+      element: '@rowCell7D',
+      text: "0.00%",
+      color: this.colors.black,
+    },
+  ];
 
   clickOnPrice() {
     this.elements.priceHeader().click();
@@ -67,6 +93,15 @@ class cryptocurrencyPage {
 
     return number;
   }
+
+  getAssertionsForTextColor(data) {
+    data.map((assertion, index) => {
+      cy.get(assertion.element)
+        .eq(index)
+        .should("have.text", assertion.text)
+        .and("have.css", "color", assertion.color);
+    });
+  }
 }
 
-module.exports = new cryptocurrencyPage();
+module.exports = new CryptocurrencyPage();
